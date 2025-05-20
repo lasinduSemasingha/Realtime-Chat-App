@@ -3,7 +3,7 @@ using API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using API.Common;
-using System.ComponentModel;
+using API.Services;
 
 namespace API.Endpoints
 {
@@ -13,8 +13,8 @@ namespace API.Endpoints
         {
             var group = app.MapGroup("/api/account").WithTags("Account");
 
-            group.MapPost("/register", async (HttpContext context, UserManager<AppUser> userManager, [FromForm] string fullName,
-                [FromForm] string email, [FromForm] string password) =>
+            group.MapPost("/register", async (HttpContext context, UserManager<AppUser> userManager, [FromForm] string username, [FromForm] string fullName,
+                [FromForm] string email, [FromForm] string password, [FromForm] IFormFile? profileImage) =>
             {
                 var userFromDb = await userManager.FindByEmailAsync(email);
                 if (userFromDb is not null)
@@ -22,10 +22,21 @@ namespace API.Endpoints
                     return Results.BadRequest(Response<string>.Failure("User already exists"));
                 }
 
+                if (profileImage is null)
+                {
+                    return Results.BadRequest(Response<string>.Failure("Profile image is required"));
+                }
+
+                var picture = await FileUpload.Upload(profileImage);
+
+                picture = $"{context.Request.Scheme}://{context.Request.Host}/uploads/{picture}";
+
                 var user = new AppUser
                 {
+                    UserName = username,
                     Email = email,
-                    FullName = fullName
+                    FullName = fullName,
+                    ProfileImage = picture
                 };
 
                 var result = await userManager.CreateAsync(user, password);

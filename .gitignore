@@ -61,3 +61,7 @@ publish/
 .env
 
 Migrations
+**/wwwroot/uploads/
+
+API/chat.db-shm
+API/chat.db-wal

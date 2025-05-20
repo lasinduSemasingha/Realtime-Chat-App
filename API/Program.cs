@@ -13,9 +13,12 @@ builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlite("Data Source=chat.d
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
+var securityKey = jwtSettings["SecurityKey"];
+if (string.IsNullOrEmpty(securityKey))
+    throw new InvalidOperationException("JWT SecurityKey is missing in configuration.");
+
 builder.Services.AddIdentityCore<AppUser>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+    .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -34,6 +37,7 @@ builder.Services.AddAuthentication(opt =>
         ValidateAudience = false
     };
 });
+builder.Services.AddAuthorization();
 
 builder.Services.AddOpenApi();
 
@@ -48,7 +52,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStaticFiles();
 
-app.MapAccountEndpoint();
+app.MapAccountEndpoint()
+    .DisableAntiforgery();
 
 app.Run();
