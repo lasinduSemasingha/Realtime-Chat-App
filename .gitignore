@@ -1,0 +1,61 @@
+## Ignore Visual Studio temporary files, build results, and
+## user-specific files
+
+# Build results
+bin/
+obj/
+out/
+artifacts/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# ASP.NET temporary files
+**/wwwroot/lib/
+**/node_modules/
+
+# Rider (JetBrains IDE)
+.idea/
+
+# VS Code settings
+.vscode/
+
+# Logs
+*.log
+
+# NuGet packages
+*.nupkg
+*.snupkg
+# The packages folder can be ignored if using PackageReference
+packages/
+
+# dotnet user secrets
+secrets.json
+
+# IIS Express settings
+.vs/
+*.vspscc
+*.vssscc
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Coverage and reports
+TestResults/
+coverage/
+
+# Publish folder
+publish/
+
+# Other
+*.db
+*.sqlite
+.env
