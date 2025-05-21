@@ -1,6 +1,7 @@
 using API.Data;
 using API.Endpoints;
 using API.Models;
+using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,8 @@ builder.Services.AddAuthentication(opt =>
         ValidateAudience = false
     };
 });
+
+builder.Services.AddScoped<TokenService>();
 builder.Services.AddAuthorization();
 
 builder.Services.AddOpenApi();
